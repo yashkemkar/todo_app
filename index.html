@@ -147,6 +147,52 @@
             </div>
         </div>
     </main>
+    <script>
+        // I can write Java Script in Here
+        // Step 1 - Initialise our list of to dos && display the to dos
+        let mainContainer = document.querySelector('main')
+        let addBtn = document.getElementById('addBtn')
+        let todoInput = document.getElementById('todoInput')
+        let todo_list = ['go get dog comb', 'eat fruit']
+
+        // This code below paints our user interface with all of our current todos
+        function paintUI() {
+            let new_inner_html = ''
+            for (let i = 0; i < todo_list.length; i++) {
+                const todo = todo_list[i]
+                new_inner_html += `
+                <div class="todoItem">
+                    <p>${todo}</p>
+                    <div class="actionsContainer">
+                        <button><i class="fa-solid fa-pen-to-square"></i></button>
+                        <button><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                </div>`//+= essentially means to append onto itself ie, update.
+            }
+            mainContainer.innerHTML = new_inner_html
+        }
+
+        paintUI()
+
+        // Step 2 - Write a function that allows us to write a new to do.
+        function addToDo() {
+            let current_todo = todoInput.value //assigns a variable to current to do input so that it can be called into an array and stored.
+            if (!current_todo) { return } //this is known as a guard clause - if the input value is empty it would return true, and we would jump out of the function.
+
+            todo_list.push(current_todo) //if it is not empty, the function would continue to push the current to do into the list.
+            paintUI()
+        }
+
+        addBtn.addEventListener('click', addToDo)
+        addBtn.addEventListener('keydown', function (e){
+            if (e.key === 'Enter') {
+                addToDo()
+            }
+        })
+        // Step 3 - Write a function that allows us to delete a to do.
+        // Step 4 - Write a function that allows us to edit a to do.
+        // Step 5 - Persist all information
+    </script>
 </body>
 
 </html>
