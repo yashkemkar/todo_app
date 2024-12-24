@@ -135,7 +135,7 @@
 
 <body>
     <header>
-        <input id="todoInput" placeholder="Enter todo ..." />
+        <input id="todoInput" placeholder="Enter to do ..." />
         <button id="addBtn">Add</button>
     </header>
     <main>
@@ -153,7 +153,7 @@
         let mainContainer = document.querySelector('main')
         let addBtn = document.getElementById('addBtn')
         let todoInput = document.getElementById('todoInput')
-        let todo_list = ['go get dog comb', 'eat fruit']
+        let todo_list = localStorage.getItem('todo-list') ? JSON.parse(localStorage.getItem('todo-list')).todo_list : []
 
         // This code below paints our user interface with all of our current todos
         function paintUI() {
@@ -164,12 +164,13 @@
                 <div class="todoItem">
                     <p>${todo}</p>
                     <div class="actionsContainer">
-                        <button><i class="fa-solid fa-pen-to-square"></i></button>
-                        <button><i class="fa-solid fa-trash"></i></button>
+                        <button onclick="editToDo(${i})"><i class="fa-solid fa-pen-to-square"></i></button>
+                        <button onclick="deleteToDo(${i})"><i class="fa-solid fa-trash"></i></button>
                     </div>
                 </div>`//+= essentially means to append onto itself ie, update.
             }
             mainContainer.innerHTML = new_inner_html
+            saveData()
         }
 
         paintUI()
@@ -180,18 +181,38 @@
             if (!current_todo) { return } //this is known as a guard clause - if the input value is empty it would return true, and we would jump out of the function.
 
             todo_list.push(current_todo) //if it is not empty, the function would continue to push the current to do into the list.
+            todoInput.value = ''
             paintUI()
         }
 
         addBtn.addEventListener('click', addToDo)
-        addBtn.addEventListener('keydown', function (e){
-            if (e.key === 'Enter') {
+        todoInput.addEventListener('keypress', function (e) {
+            if (event.key === 'Enter') {
+                event.preventDefault()
                 addToDo()
             }
         })
         // Step 3 - Write a function that allows us to delete a to do.
+        function deleteToDo(index) {
+            let new_todo_list = todo_list.filter((current_value, current_index) => {
+                return current_index !== index
+            })
+            todo_list = new_todo_list
+            paintUI()
+        }
+
         // Step 4 - Write a function that allows us to edit a to do.
+
+        function editToDo(index) {
+            let current_todo = todo_list[index]
+            todoInput.value = current_todo
+            deleteToDo(index)
+        }
         // Step 5 - Persist all information
+
+        function saveData() {
+            localStorage.setItem('todo-list', JSON.stringify({todo_list}))
+        }
     </script>
 </body>
 
